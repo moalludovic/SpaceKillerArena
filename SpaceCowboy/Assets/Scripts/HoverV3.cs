@@ -191,7 +191,7 @@ public class HoverV3 : MonoBehaviour {
         {
             rb.AddForce(-transform.forward * axeleration * Time.deltaTime);
         }
-        Velocity.text = (Vector3.Magnitude(rb.velocity) * 3.6f).ToString();
+        Velocity.text = (Vector3.Magnitude(rb.velocity) * 3.6f).ToString("000");
     }//fin fixed update
 
 
