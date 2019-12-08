@@ -29,6 +29,9 @@ public class HoverV3 : MonoBehaviour {
     public Transform propulsorsParent;
     public List<Transform> reactors;
 
+    public float vDragCoef = 1;
+    public bool vDragLinear = true;
+
     //rotation
     public bool quaternionStabilisation = true;
     public float rotStabilisationLerp = 20f;
@@ -191,7 +194,19 @@ public class HoverV3 : MonoBehaviour {
         {
             rb.AddForce(-transform.forward * axeleration * Time.deltaTime);
         }
-        Velocity.text = (Vector3.Magnitude(rb.velocity) * 3.6f).ToString("000");
+
+        //horizontal drag
+        float vSpeed = Mathf.Cos(Vector3.Angle(rb.velocity, transform.up) * Mathf.PI / 180) * Vector3.Magnitude(rb.velocity) ;
+        float dragForceMagnitude;
+        if(vDragLinear){
+            dragForceMagnitude = vSpeed * Mathf.Min(Time.deltaTime * vDragCoef,1);
+        }
+        else{
+            dragForceMagnitude = vSpeed * Mathf.Min(Mathf.Abs(vSpeed) * Time.deltaTime * vDragCoef, 1);
+        }
+       rb.velocity = rb.velocity - transform.up * dragForceMagnitude;
+        
+        Velocity.text = (Vector3.Magnitude(rb.velocity) * 3.6f).ToString("000") + " : " + (vSpeed*3.6).ToString("000");
     }//fin fixed update
 
 

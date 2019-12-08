@@ -297,6 +297,8 @@ MonoBehaviour:
   repulsionMult: 2
   propulsorsParent: {fileID: 1023392122}
   reactors: []
+  vDragCoef: 0.2
+  vDragLinear: 1
   quaternionStabilisation: 1
   rotStabilisationLerp: 40
   rotStabilisationThreshold: 0.05
@@ -748,8 +750,8 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 'Speed
 
