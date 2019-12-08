@@ -262,7 +262,7 @@ Rigidbody:
   m_GameObject: {fileID: 150745694}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 1.6
+  m_Drag: 1.5
   m_AngularDrag: 2
   m_UseGravity: 0
   m_IsKinematic: 0
@@ -283,21 +283,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Velocity: {fileID: 705484006}
   body: {fileID: 322016159}
-  axeleration: 4000
+  axeleration: 6000
   rotationForce: 400
-  force: 3000
+  force: 10500
   RayDist: 20
   maxTargetDist: 0.3
   adjustForceWithMaxTargetDist: 1
-  groundDistance: 1
-  forceStabilisationAmplitude: 2.5
+  groundDistance: 1.5
+  forceStabilisationAmplitude: 3
   forceStabilisationExponent: 3
-  repulsionMinDist: 0.5
+  repulsionMinDist: 0.7
   repulsionExponent: 2.5
   repulsionMult: 2
   propulsorsParent: {fileID: 1023392122}
   reactors: []
-  vDragCoef: 0.2
+  vDragCoef: 6
   vDragLinear: 1
   quaternionStabilisation: 1
   rotStabilisationLerp: 40
