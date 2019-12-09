@@ -1,4 +1,4 @@
-Shader "UCLA Game Lab/Wireframe/Single-Sided Custom" 
+Shader "UCLA Game Lab/Wireframe/Single-Sided Custom Quad" 
 {
 	Properties 
 	{
@@ -22,7 +22,7 @@ Shader "UCLA Game Lab/Wireframe/Single-Sided Custom"
 			CGPROGRAM
 				#pragma target 5.0
 				#include "UnityCG.cginc"
-				#include "UCLA GameLab Wireframe Functions.cginc"
+				#include "UCLA GameLab Wireframe Functions Quad.cginc"
 				#pragma vertex vert
 				#pragma fragment frag
 				#pragma geometry geom
