@@ -76,7 +76,7 @@ Material:
     - _SrcBlend: 1
     - _Thickness: 10
     - _UVSec: 0
-    - _WaveFactor: 0.8
+    - _WaveFactor: 0
     - _ZWrite: 1
     m_Colors:
     - _BackgroundColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}

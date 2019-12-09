@@ -8,6 +8,7 @@ public class HoverV3 : MonoBehaviour {
     private Rigidbody rb;
     public Text Velocity;
     public Transform body;
+    public ParticleSystem particle;
 
     //vitesse
     public float axeleration = 4000; //8000 (setup superspeed)
@@ -43,8 +44,9 @@ public class HoverV3 : MonoBehaviour {
 
     //jump (déplace la target)
     public float jumpProportion=1.5f;
-    public float jumpDelay=0.5f;
-    private float currentJumpProportion = 0;
+    public float jumpConsumption = 1.2f;
+    float jumpUsage = 0;
+    bool isJumpLocked = false;
 
 	// Use this for initialization
 	void Start ()
@@ -83,35 +85,38 @@ public class HoverV3 : MonoBehaviour {
         Vector3 targetPos = Vector3.zero;   //on récupère la position cible pour chaque réacteur afin de faire la moyenne
         float currentGroundDistance = 0; //on récupère la distance au sol pour chaque réacteur afin de faire la moyenne
         
-        //saut préparation
-        if (Input.GetKey(KeyCode.Space)){
-            if(jumpDelay == 0){
-                    currentJumpProportion = jumpProportion;
-            }
-            else{
-                currentJumpProportion = Mathf.Min(currentJumpProportion + jumpProportion * Time.deltaTime / jumpDelay,jumpProportion);
-            }
-        }
-        else{
-            if (jumpDelay == 0)
-            {
-                currentJumpProportion = 0;
-            }
-            else
-            {
-                currentJumpProportion = Mathf.Max(currentJumpProportion - jumpProportion * Time.deltaTime / jumpDelay, 0);
-            }
-        }
-        
         //calculs dedss variables pour les forces de lévitation
-        if (currentJumpProportion!=0)//saut
+        if (Input.GetKey(KeyCode.Space) && ! isJumpLocked)//saut
         {
-            groundNormal = transform.up;
-            targetPos = transform.position + transform.up * jumpProportion;
+            ////données saut
+            jumpUsage = Mathf.Min(jumpUsage + jumpConsumption * Time.deltaTime,1);
+            if(jumpUsage == 1){
+                isJumpLocked = true;
+            }
+            ////forces
+            for (int i = 0; i < reactors.Count; ++i)
+            {
+                if (Physics.Raycast(reactors[i].position, -transform.up, out hit, RayDist))
+                {
+                    groundNormal += hit.normal;
+                }
+                else
+                {
+                    groundNormal += transform.up;
+                }
+            }
+            groundNormal = Vector3.Normalize(groundNormal);
+            targetPos = transform.position + groundNormal * jumpProportion;
             currentGroundDistance = forceStabilisationAmplitude + groundDistance;
         }
         else//lévitation
         {
+            ////données saut
+            jumpUsage = Mathf.Max(jumpUsage - jumpConsumption * Time.deltaTime, 0);
+            if (jumpUsage == 0)
+            {
+                isJumpLocked = false;
+            }
             ////forces
             for (int i = 0; i < reactors.Count; ++i)
             {
@@ -148,9 +153,9 @@ public class HoverV3 : MonoBehaviour {
                     targetPos += reactors[i].position - transform.up * (maxTargetDist);
                     Debug.DrawLine(reactors[i].position, reactors[i].position - transform.up * (maxTargetDist + groundDistance), Color.red);
                 }
+                groundNormal = Vector3.Normalize(groundNormal);
             }
             //moyennes des valeurs récupérées
-            groundNormal /= reactors.Count;
             targetPos /= reactors.Count;
             currentGroundDistance /= reactors.Count;
         }
@@ -186,14 +191,21 @@ public class HoverV3 : MonoBehaviour {
         float animRot = Mathf.LerpAngle(body.localEulerAngles.z, -turnAxis * 50, 2f * Time.deltaTime);
         body.localEulerAngles = new Vector3(body.localEulerAngles.x, body.localEulerAngles.y, animRot);
         //déplacement
+        ParticleSystem.EmissionModule em = particle.emission;
         if (Input.GetKey(KeyCode.UpArrow))
         {
             rb.AddForce(transform.forward * axeleration * Time.deltaTime);
+            em.enabled = true;
+
         }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            rb.AddForce(-transform.forward * axeleration * Time.deltaTime);
+        else{
+            em.enabled = false;
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                rb.AddForce(-transform.forward * axeleration * Time.deltaTime);
+            }
         }
+        
 
         //horizontal drag
         float vSpeed = Mathf.Cos(Vector3.Angle(rb.velocity, transform.up) * Mathf.PI / 180) * Vector3.Magnitude(rb.velocity) ;

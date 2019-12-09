@@ -19,11 +19,15 @@ public class RunnerManager : MonoBehaviour
     public Transform deathZone;
 
     public float disparitionFrequency = 2.5f;
+    public float disparitionFastFrequency = 0.5f;
+    public float disparitionTimer = 0;
+    public float disparitionFastDist = 100;
+
     private float totalProbabilities = 0;
 
     //private Collider 
 
-    const float minDist = 1000;
+    const float spawnDist = 1000;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,18 +35,32 @@ public class RunnerManager : MonoBehaviour
             totalProbabilities += t.probability;
         }
         SpawnTubes();
-        StartCoroutine("removeTube");
     }
 
     // Update is called once per frame
     void Update()
     {
         SpawnTubes();
+
+        disparitionTimer += Time.deltaTime;
+        if ((disparitionTimer > disparitionFrequency || (Vector3.Distance(player.position, tubeList[0].transform.Find("EndAnchor").transform.position) > disparitionFastDist && disparitionTimer > disparitionFastFrequency))&&tubeList.Count!=0){
+            disparitionTimer = 0;
+            GameObject toDestroy = tubeList[0];
+            //death zone
+            deathZone.transform.position = tubeList[0].transform.position;
+            Vector3 s = toDestroy.transform.Find("RunnerTube").transform.localScale;
+            Vector3 b = toDestroy.transform.Find("RunnerTube").GetComponent<MeshFilter>().mesh.bounds.extents * 2;
+            deathZone.transform.localScale = new Vector3(s.x * b.x, s.y * b.y, s.z * b.z);
+            deathZone.transform.rotation = tubeList[0].transform.Find("RunnerTube").transform.rotation;
+            //suppression
+            tubeList.RemoveAt(0);
+            GameObject.Destroy(toDestroy);
+        }
     }
 
     //apparitions des tubes au deça d'une certaine distance
     void SpawnTubes(){
-       if(Vector3.Distance(player.position, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.position) < minDist)
+       if(Vector3.Distance(player.position, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.position) < spawnDist)
         {
             GameObject newTube = GameObject.Instantiate(tubePrefabs[0], tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.position, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.rotation);
             newTube.transform.position -= (newTube.transform.Find("StartAnchor").transform.position - newTube.transform.position);
@@ -72,22 +90,4 @@ public class RunnerManager : MonoBehaviour
         }
         
     }
-
-    //suppression des tubes à le fréquence indiquée
-    IEnumerator removeTube(){
-        yield return new WaitForSeconds(disparitionFrequency);
-        GameObject toDestroy = tubeList[0];
-        //death zone
-        deathZone.transform.position = tubeList[0].transform.position;
-        Vector3 s = toDestroy.transform.Find("RunnerTube").transform.localScale;
-        Vector3 b = toDestroy.transform.Find("RunnerTube").GetComponent<MeshFilter>().mesh.bounds.extents * 2;
-        deathZone.transform.localScale = new Vector3(s.x * b.x, s.y * b.y, s.z * b.z);
-        deathZone.transform.rotation = tubeList[0].transform.Find("RunnerTube").transform.rotation;
-        //suppression
-        tubeList.RemoveAt(0);
-        GameObject.Destroy(toDestroy);
-        StartCoroutine("removeTube");
-    }
-
-
 }
