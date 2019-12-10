@@ -8,7 +8,7 @@ public class CameraStalker : MonoBehaviour {
     private Vector3 relativePos;
     private Quaternion relativeRot;
 
-    private float speed = 15;
+    private float speed = 10;
     private float collisionOffset = 1;
     
     private float magnitude = 0.05f;

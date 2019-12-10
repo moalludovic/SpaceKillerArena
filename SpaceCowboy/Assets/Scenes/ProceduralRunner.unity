@@ -262,31 +262,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tubePrefabs:
-  - {fileID: 743850985050286105, guid: fcf2f18668fe85948b41d9ee0257a526, type: 3}
+  - prefab: {fileID: 743850985050286105, guid: fcf2f18668fe85948b41d9ee0257a526, type: 3}
+    prob: 10
+  - prefab: {fileID: 743850985050286105, guid: b455d9b64878bc943ba44cb10359a176, type: 3}
+    prob: 1
   trapPrefabs:
   - prefab: {fileID: 5229299617483752908, guid: cfbe2c4ecadaa1a4f8d02c1ff8144888,
       type: 3}
-    probability: 1
+    prob: 1
   - prefab: {fileID: 4334975240534255235, guid: 1bce339fe9abb05479e9ee1cb0e8cfe8,
       type: 3}
-    probability: 1
+    prob: 1
   - prefab: {fileID: 4952726792142534860, guid: 8b4b4ef31b57e9f4d8253ec267772f9e,
       type: 3}
-    probability: 1
+    prob: 1
   - prefab: {fileID: 2860949940101917884, guid: d5e00271d1e1d634b992cd2f9784fa85,
       type: 3}
-    probability: 1
+    prob: 1
   - prefab: {fileID: 5623704114486940425, guid: 1ecacdad39c6b0445846854bd8f53727,
       type: 3}
-    probability: 1
+    prob: 1
   - prefab: {fileID: 1790098723773266201, guid: ac7c8a244d461ca4b9c3aeaea93817d1,
       type: 3}
-    probability: 1
+    prob: 1
   - prefab: {fileID: 2986079081818516951, guid: 3b2c3fe19ccb14147a324026271f3ccc,
       type: 3}
-    probability: 1
+    prob: 0.5
   - prefab: {fileID: 0}
-    probability: 1
+    prob: 0.5
   tubeList:
   - {fileID: 1475002499}
   player: {fileID: 8720636955791869329}
@@ -5725,6 +5728,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: d7fc2dbe089964e4eb0bc3f6ed7941aa,
         type: 3}
+    - target: {fileID: 2781424656331637203, guid: 690318ebf97f600408eee8883c573cbc,
+        type: 3}
+      propertyPath: stopNaNPropagation
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 690318ebf97f600408eee8883c573cbc, type: 3}
 --- !u!4 &8720636955791869329 stripped

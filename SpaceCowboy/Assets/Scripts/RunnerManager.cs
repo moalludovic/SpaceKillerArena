@@ -4,16 +4,16 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class Trap
+public struct ToSpawn
 {
     public GameObject prefab;
-    public float probability;
+    public float prob;
 }
 
 public class RunnerManager : MonoBehaviour
 {
-    public List<GameObject> tubePrefabs;
-    public List<Trap> trapPrefabs;
+    public List<ToSpawn> tubePrefabs;
+    public List<ToSpawn> trapPrefabs;
     public List<GameObject> tubeList;
     public Transform player;
     public Transform deathZone;
@@ -25,7 +25,8 @@ public class RunnerManager : MonoBehaviour
     public float disparitionTimer = 0;
     public float disparitionFastDist = 100;
 
-    private float totalProbabilities = 0;
+    private float totalTrapProb = 0;
+    private float totalTubeProb = 0;
 
     //private Collider 
 
@@ -33,8 +34,12 @@ public class RunnerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach(Trap t in trapPrefabs){
-            totalProbabilities += t.probability;
+        foreach(ToSpawn t in trapPrefabs){
+            totalTrapProb += t.prob;
+        }
+        foreach (ToSpawn t in tubePrefabs)
+        {
+            totalTubeProb += t.prob;
         }
         SpawnTubes();
         tubeList[0].transform.Find("RunnerTube").GetComponent<MeshRenderer>().material = mat;
@@ -72,32 +77,32 @@ public class RunnerManager : MonoBehaviour
     void SpawnTubes(){
        while(Vector3.Distance(player.position, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.position) < spawnDist)
         {
-            GameObject newTube = GameObject.Instantiate(tubePrefabs[0], tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.position, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.rotation);
+            GameObject newTube = GameObject.Instantiate(tubePrefabs[PonderedRandomIndex(tubePrefabs, totalTubeProb)].prefab, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.position, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.rotation);
             newTube.transform.position -= (newTube.transform.Find("StartAnchor").transform.position - newTube.transform.position);
 
             for(int i = 0; i <  newTube.transform.Find("Obstacles").childCount;++i){
-                SpawnTrap(newTube.transform.Find("Obstacles").GetChild(i));
+                int index = PonderedRandomIndex(trapPrefabs, totalTrapProb);
+                if (trapPrefabs[index].prefab != null)
+                {
+                    GameObject newTrap = GameObject.Instantiate(trapPrefabs[index].prefab, newTube.transform.Find("Obstacles").GetChild(i));
+                    newTrap.transform.localRotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0, 360), 0));
+                }
             }
 
             tubeList.Add(newTube);
         }
     }
 
-    void SpawnTrap(Transform parent){
+    int PonderedRandomIndex(List<ToSpawn> Prefabs, float totalProb){
         float sum = 0;
-        float rand = UnityEngine.Random.Range(0, totalProbabilities);
+        float rand = UnityEngine.Random.Range(0, totalProb);
         int i = -1;
         while(sum<rand)
         {
             ++i;
-            sum += trapPrefabs[i].probability;
+            sum += Prefabs[i].prob;
         }
 
-        if(trapPrefabs[i].prefab != null)
-        {
-            GameObject newTrap = GameObject.Instantiate(trapPrefabs[i].prefab, parent);
-            newTrap.transform.localRotation = Quaternion.Euler( new Vector3(0, UnityEngine.Random.Range(0, 360), 0 ));
-        }
-        
+        return i;
     }
 }
