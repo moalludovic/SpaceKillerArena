@@ -18,6 +18,8 @@ public class RunnerManager : MonoBehaviour
     public Transform player;
     public Transform deathZone;
 
+    public Material mat;
+
     public float disparitionFrequency = 2.5f;
     public float disparitionFastFrequency = 0.5f;
     public float disparitionTimer = 0;
@@ -35,15 +37,15 @@ public class RunnerManager : MonoBehaviour
             totalProbabilities += t.probability;
         }
         SpawnTubes();
+        tubeList[0].transform.Find("RunnerTube").GetComponent<MeshRenderer>().material = mat;
     }
 
     // Update is called once per frame
     void Update()
     {
         SpawnTubes();
-
         disparitionTimer += Time.deltaTime;
-        if ((disparitionTimer > disparitionFrequency || (Vector3.Distance(player.position, tubeList[0].transform.Find("EndAnchor").transform.position) > disparitionFastDist && disparitionTimer > disparitionFastFrequency))&&tubeList.Count!=0){
+        if (tubeList.Count != 0 && (disparitionTimer > disparitionFrequency || (Vector3.Distance(player.position, tubeList[0].transform.Find("EndAnchor").transform.position) > disparitionFastDist && disparitionTimer > disparitionFastFrequency))){
             disparitionTimer = 0;
             GameObject toDestroy = tubeList[0];
             //death zone
@@ -55,12 +57,20 @@ public class RunnerManager : MonoBehaviour
             //suppression
             tubeList.RemoveAt(0);
             GameObject.Destroy(toDestroy);
+            //assignation material
+            tubeList[0].transform.Find("RunnerTube").GetComponent<MeshRenderer>().material = mat;
+        }
+        if(Vector3.Distance(player.position, tubeList[0].transform.Find("EndAnchor").transform.position) > disparitionFastDist){
+            mat.SetFloat("_Fade", disparitionTimer/disparitionFastFrequency);
+        }
+        else{
+            mat.SetFloat("_Fade", disparitionTimer/disparitionFrequency);
         }
     }
 
     //apparitions des tubes au deça d'une certaine distance
     void SpawnTubes(){
-       if(Vector3.Distance(player.position, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.position) < spawnDist)
+       while(Vector3.Distance(player.position, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.position) < spawnDist)
         {
             GameObject newTube = GameObject.Instantiate(tubePrefabs[0], tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.position, tubeList[tubeList.Count - 1].transform.Find("EndAnchor").transform.rotation);
             newTube.transform.position -= (newTube.transform.Find("StartAnchor").transform.position - newTube.transform.position);

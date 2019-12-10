@@ -45,8 +45,8 @@ public class HoverV3 : MonoBehaviour {
     //jump (déplace la target)
     public float jumpProportion=1.5f;
     public float jumpConsumption = 1.2f;
-    float jumpUsage = 0;
-    bool isJumpLocked = false;
+    public float jumpUsage = 0;
+    public bool isJumpLocked = false;
 
 	// Use this for initialization
 	void Start ()

@@ -1,4 +1,4 @@
-Shader "UCLA Game Lab/Wireframe/Single-Sided Custom Quad" 
+Shader "UCLA Game Lab/Wireframe/Single-Sided Custom Quad Fade" 
 {
 	Properties 
 	{
@@ -9,6 +9,7 @@ Shader "UCLA Game Lab/Wireframe/Single-Sided Custom Quad"
 		_BackgroundTex("Background Texture", 2D) = "white" {}
 		_WaveFactor ("wave factor", Float) = 0.5
 		_FadeColor ("Fade Color", Color) = (1,1,1,1)
+		_Fade ("Fade", Float) = 0
 	}
 
 	SubShader 
@@ -31,6 +32,9 @@ Shader "UCLA Game Lab/Wireframe/Single-Sided Custom Quad"
 				float4 _BackgroundColor;
 				float _WaveFactor;
 				sampler2D _BackgroundTex;
+
+				float _Fade;
+				float4 _FadeColor;
 
 				// Vertex Shader
 				UCLAGL_v2g vert(appdata_base v)
@@ -58,6 +62,8 @@ Shader "UCLA Game Lab/Wireframe/Single-Sided Custom Quad"
 					col = col * wave;
 					col.a = 1;
 					
+					col = (1-_Fade)*col + _Fade * _FadeColor;
+
 					return col;
 				}
 			
