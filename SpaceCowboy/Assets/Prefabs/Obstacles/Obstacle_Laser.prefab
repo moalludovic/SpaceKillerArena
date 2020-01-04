@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8211847249297151773}
   - component: {fileID: 3843847090849959538}
   - component: {fileID: 3343834931771486669}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cylinder (2)
   m_TagString: DeathZone
   m_Icon: {fileID: 0}
@@ -4870,7 +4870,7 @@ GameObject:
   - component: {fileID: 7234944081413618412}
   - component: {fileID: 8054911635580296055}
   - component: {fileID: 6791902815669433114}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Laser
   m_TagString: DeathZone
   m_Icon: {fileID: 0}
@@ -4970,7 +4970,7 @@ GameObject:
   - component: {fileID: 3509293174361584758}
   - component: {fileID: 1709799739744422811}
   - component: {fileID: 7561317095391379133}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cylinder (3)
   m_TagString: DeathZone
   m_Icon: {fileID: 0}
@@ -9837,6 +9837,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Laser
+      objectReference: {fileID: 0}
+    - target: {fileID: 3452415638631694406, guid: 337b20febd56ce348b848b100bce2d01,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973192539373730316, guid: 337b20febd56ce348b848b100bce2d01,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126752162989216776, guid: 337b20febd56ce348b848b100bce2d01,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}

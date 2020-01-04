@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f6a4968254d40794380af293919b72e1, type: 2}
+  - {fileID: 2100000, guid: a2bff8be9423ac14dae89cf79eb3409e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7337754742174516389}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Boost_Dash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

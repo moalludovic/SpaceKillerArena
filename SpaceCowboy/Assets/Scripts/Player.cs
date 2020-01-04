@@ -5,20 +5,24 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    private HoverV3 hover;
+    ////speed and jump
+    public Vector2 barRotationRange = new Vector2(20,110);
+    //speed
     public GameObject speedUI;
     public Color speedBar;
     public Color speedBarFilled;
     public Color speedBarBoost;
     public float maxSpeed = 172;
-
+    //jump
     public GameObject jumpUI;
     public Color jumpBar;
     public Color jumpBarEmpty;
     public Color jumpBarFilled;
 
-    public Vector2 barRotationRange = new Vector2(20,110);
+    public UIManager UI;
 
-    private HoverV3 hover;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -66,6 +70,10 @@ public class Player : MonoBehaviour
     {
         if(other.gameObject.tag == "DeathZone"){
             Debug.Log("Tu es mort");
+            UI.Death();
+        }
+        if(other.gameObject.tag == "Dash"){
+            hover.SetBoostActive();
         }
     }
 }

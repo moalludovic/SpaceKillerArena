@@ -43,6 +43,9 @@ public class RunnerManager : MonoBehaviour
         }
         SpawnTubes();
         tubeList[0].transform.Find("RunnerTube").GetComponent<MeshRenderer>().material = mat;
+
+        //mettre en pause pour 3 secondes
+        GetComponent<UIManager>().StartTimer();
     }
 
     // Update is called once per frame

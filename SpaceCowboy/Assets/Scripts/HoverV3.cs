@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class HoverV3 : MonoBehaviour {
     private RaycastHit hit;
     private Rigidbody rb;
@@ -48,6 +49,14 @@ public class HoverV3 : MonoBehaviour {
     public float jumpUsage = 0;
     public bool isJumpLocked = false;
 
+    //boost
+    public float boostMultiplicator = 1.1f;
+    public float boostDuration = 1f;
+    private float boostState = 0f;
+    private bool isBoostActive = false;
+    private ParticleSystem.MinMaxGradient particleColor;
+    public ParticleSystem.MinMaxGradient particleColorBoost;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -72,7 +81,11 @@ public class HoverV3 : MonoBehaviour {
                 Vector3.Normalize(gravityDirection);
             }
         }
-	}
+
+        //récupération couleur initiale des particules
+        particleColor = particle.main.startColor;
+
+    }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -85,7 +98,7 @@ public class HoverV3 : MonoBehaviour {
         Vector3 targetPos = Vector3.zero;   //on récupère la position cible pour chaque réacteur afin de faire la moyenne
         float currentGroundDistance = 0; //on récupère la distance au sol pour chaque réacteur afin de faire la moyenne
         
-        //calculs dedss variables pour les forces de lévitation
+        //calculs des variables pour les forces de lévitation
         if (Input.GetKey(KeyCode.Space) && ! isJumpLocked)//saut
         {
             ////données saut
@@ -96,7 +109,7 @@ public class HoverV3 : MonoBehaviour {
             ////forces
             for (int i = 0; i < reactors.Count; ++i)
             {
-                if (Physics.Raycast(reactors[i].position, -transform.up, out hit, RayDist))
+                if (Physics.Raycast(reactors[i].position, -transform.up, out hit, RayDist, 9))
                 {
                     groundNormal += hit.normal;
                 }
@@ -120,7 +133,7 @@ public class HoverV3 : MonoBehaviour {
             ////forces
             for (int i = 0; i < reactors.Count; ++i)
             {
-                if (Physics.Raycast(reactors[i].position, -transform.up, out hit, RayDist))
+                if (Physics.Raycast(reactors[i].position, -transform.up, out hit, RayDist, 9))
                 {
                     //grounded = true;
                     groundNormal += hit.normal;
@@ -192,9 +205,21 @@ public class HoverV3 : MonoBehaviour {
         body.localEulerAngles = new Vector3(body.localEulerAngles.x, body.localEulerAngles.y, animRot);
         //déplacement
         ParticleSystem.EmissionModule em = particle.emission;
+        ParticleSystem.MainModule settings = particle.main;
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            rb.AddForce(transform.forward * axeleration * Time.deltaTime);
+            float tempAxelecation = axeleration;
+            if (isBoostActive)
+            {
+                tempAxelecation *= boostMultiplicator;
+                settings.startColor = particleColorBoost;
+            }
+            else
+            {
+                settings.startColor = particleColor;
+            }
+
+            rb.AddForce(transform.forward * tempAxelecation * Time.deltaTime);
             em.enabled = true;
 
         }
@@ -205,7 +230,14 @@ public class HoverV3 : MonoBehaviour {
                 rb.AddForce(-transform.forward * axeleration * Time.deltaTime);
             }
         }
-        
+        //boost
+        if(isBoostActive){
+            boostState -= Time.deltaTime;
+            if(boostState<=0){
+                boostState = 0;
+                isBoostActive = false;
+            }
+        }
 
         //horizontal drag
         float vSpeed = Mathf.Cos(Vector3.Angle(rb.velocity, transform.up) * Mathf.PI / 180) * Vector3.Magnitude(rb.velocity) ;
@@ -225,5 +257,10 @@ public class HoverV3 : MonoBehaviour {
     private void OnCollisionEnter(Collision collision)
     {
         Debug.LogWarning("collision");
+    }
+
+    public void SetBoostActive(){
+        isBoostActive = true;
+        boostState = boostDuration;
     }
 }//fin classe
