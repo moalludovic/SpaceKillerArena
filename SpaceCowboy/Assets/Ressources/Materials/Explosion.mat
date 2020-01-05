@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Danger
-  m_Shader: {fileID: 4800000, guid: b1f54d0366938af4a94382390d71a7bd, type: 3}
+  m_Name: Explosion
+  m_Shader: {fileID: 4800000, guid: fe6175e8e64e8804f9b79355eef0ea9c, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0

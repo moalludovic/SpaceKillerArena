@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     private HoverV3 hover;
     ////speed and jump
-    public Vector2 barRotationRange = new Vector2(20,110);
+    public Vector2 barRotationRange = new Vector2(20, 110);
     //speed
     public GameObject speedUI;
     public Color speedBar;
@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     {
         float speed = Vector3.Magnitude(GetComponent<Rigidbody>().velocity) * 3.6f;
         float speedProportion = Mathf.Min(speed / maxSpeed, 1);
-        speedUI.transform.localRotation = Quaternion.Euler(0, Mathf.Lerp(-barRotationRange.x, -barRotationRange.y, speedProportion),0);
+        speedUI.transform.localRotation = Quaternion.Euler(0, Mathf.Lerp(-barRotationRange.x, -barRotationRange.y, speedProportion), 0);
         jumpUI.transform.localRotation = Quaternion.Euler(0, Mathf.Lerp(barRotationRange.x, barRotationRange.y, speedProportion), 0);
 
         //rotation
@@ -66,14 +66,28 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Die()
     {
-        if(other.gameObject.tag == "DeathZone"){
-            Debug.Log("Tu es mort");
-            UI.Death();
-        }
-        if(other.gameObject.tag == "Dash"){
-            hover.SetBoostActive();
-        }
+        Debug.Log("Tu es mort");
+        GetComponent<AudioSource>().Play();
+        UI.Death();
+    }
+
+    public void Dash()
+    {
+        hover.SetBoostActive();
     }
 }
+
+//    private void OnTriggerEnter(Collider other)
+//    {
+//        if(other.gameObject.tag == "DeathZone"){
+//            Debug.Log("Tu es mort");
+//            GetComponent<AudioSource>().Play();
+//            UI.Death();
+//        }
+//        if(other.gameObject.tag == "Dash"){
+//            hover.SetBoostActive();
+//        }
+//    }
+//}

@@ -57,6 +57,13 @@ public class HoverV3 : MonoBehaviour {
     private ParticleSystem.MinMaxGradient particleColor;
     public ParticleSystem.MinMaxGradient particleColorBoost;
 
+    //AccelerationSound
+    public AudioSource AccelerationSound;
+    private float accelerationSoundState = 0;
+    public float accelerationSoundSpeed = .5f;
+    private const float minPitch = .2f;
+    private const float maxPitch = 1f;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -221,15 +228,18 @@ public class HoverV3 : MonoBehaviour {
 
             rb.AddForce(transform.forward * tempAxelecation * Time.deltaTime);
             em.enabled = true;
+            accelerationSoundState = Mathf.Min(accelerationSoundState + Time.deltaTime * accelerationSoundSpeed,1);
 
         }
         else{
             em.enabled = false;
+            accelerationSoundState = Mathf.Max(accelerationSoundState - Time.deltaTime * accelerationSoundSpeed, 0);
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 rb.AddForce(-transform.forward * axeleration * Time.deltaTime);
             }
         }
+        AccelerationSound.pitch = Mathf.Lerp(minPitch,maxPitch,accelerationSoundState);
         //boost
         if(isBoostActive){
             boostState -= Time.deltaTime;

@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     public float tempTime;
 
     ////timer
+    public AudioSource TimerSound;
     public GameObject timerObject;
     private Text Timer;
     public float timerDuration = 3;
@@ -46,11 +47,17 @@ public class UIManager : MonoBehaviour
                 isTimerActive = false;
                 fadeDown = true;
                 Timer.text = "0";
+                TimerSound.Play();
             }
             else
             {
                 timerState -= myDeltaTime;
-                Timer.text = ((int)(timerState + 1)).ToString();
+                string newText = ((int)(timerState + 1)).ToString();
+                if(newText!=Timer.text)
+                {
+                    Timer.text = newText;
+                    TimerSound.Play();
+                }
             }
         }
 
