@@ -6976,6 +6976,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5585960520355364675, guid: 690318ebf97f600408eee8883c573cbc,
+        type: 3}
+      propertyPath: m_Radius
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 2781424657649089865, guid: 690318ebf97f600408eee8883c573cbc,
         type: 3}
       propertyPath: m_IgnoreReversedGraphics
